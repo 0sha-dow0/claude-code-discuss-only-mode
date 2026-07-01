@@ -14,7 +14,7 @@ This is a Claude Code port of the Codex `discuss-mode` plugin.
 Add this marketplace:
 
 ```
-/plugin marketplace add 0sha-dow0/claude-discuss-mode
+/plugin marketplace add 0sha-dow0/claude-code-discuss-only-mode
 ```
 
 Install the plugin:
