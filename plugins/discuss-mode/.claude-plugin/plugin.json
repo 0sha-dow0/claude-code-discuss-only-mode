@@ -1,0 +1,16 @@
+{
+  "name": "discuss-mode",
+  "version": "0.1.0",
+  "description": "Adds a lightweight /discuss mode that keeps a Claude Code turn brainstorming-only and read-only by blocking file-mutating tools.",
+  "author": {
+    "name": "SHADAB HOSSAIN SHAIKH",
+    "email": "SHAIKHSHADAB.HOSSAIN@GMAIL.COM"
+  },
+  "license": "MIT",
+  "keywords": [
+    "discuss",
+    "hooks",
+    "read-only",
+    "brainstorming"
+  ]
+}

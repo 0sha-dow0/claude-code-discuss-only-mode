@@ -1,0 +1,15 @@
+{
+  "name": "discuss-mode-marketplace",
+  "owner": {
+    "name": "SHADAB HOSSAIN SHAIKH",
+    "email": "SHAIKHSHADAB.HOSSAIN@GMAIL.COM"
+  },
+  "plugins": [
+    {
+      "name": "discuss-mode",
+      "source": "./plugins/discuss-mode",
+      "description": "A lightweight /discuss mode for Claude Code: marks the current turn as read-only brainstorming and blocks file-mutating tools (Write, Edit, NotebookEdit) via hooks.",
+      "version": "0.1.0"
+    }
+  ]
+}
