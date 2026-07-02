@@ -19,18 +19,17 @@ MARKER_TTL_SECONDS = 24 * 60 * 60
 MUTATING_TOOLS = frozenset({"Write", "Edit", "MultiEdit", "NotebookEdit"})
 
 GUIDANCE = (
-    "The user used /discuss. This turn is brainstorm-only/read-only. Do not "
-    "edit files, write files, apply patches, run codegen, formatters, "
-    "migrations, or any command intended to change repo-tracked state. You may "
-    "inspect, search, read files, run clearly non-mutating checks, and ask "
-    "clarifying questions. If the user wants implementation, they can ask in a "
-    "later turn without /discuss."
+    "This turn was marked /discuss, so treat it as read-only. Read, search, and "
+    "reason through the problem, but do not modify anything: no file writes or "
+    "edits, no patches, no code generation, no formatters or migrations. "
+    "Non-mutating inspection and clarifying questions are welcome. To make "
+    "changes, resend the request without /discuss."
 )
 
 BLOCK_REASON = (
-    "Blocked because this turn is in /discuss mode. The user wants "
-    "brainstorming/read-only discussion only. Ask questions, inspect files, "
-    "or propose a plan instead of modifying files."
+    "/discuss is active, so this turn is read-only. The user asked to brainstorm, "
+    "not to change files. Propose a plan, inspect the code, or ask a question "
+    "instead of editing."
 )
 
 

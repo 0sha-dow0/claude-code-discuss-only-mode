@@ -1,68 +1,60 @@
-# Claude Discuss Mode
+# discuss-mode
 
-A public [Claude Code](https://code.claude.com) plugin marketplace containing `discuss-mode`,
-a lightweight hook bundle for `/discuss` turns.
+A Claude Code plugin that adds a read-only "think first" mode. Put `/discuss` anywhere in a
+prompt and that turn becomes conversation-only: Claude can read, search, and reason about
+your code, but it cannot change any files.
 
-When a prompt contains `/discuss`, the plugin injects read-only brainstorming guidance for the
-current turn and blocks Claude's file-mutating tools (`Write`, `Edit`, `NotebookEdit`). Shell
-commands (`Bash`) are not classified or blocked.
+Handy when you want to review a design, weigh options, or scope a change before Claude starts
+editing.
 
-This is a Claude Code port of the Codex `discuss-mode` plugin.
+## How it works
+
+The plugin is just two hooks — no slash command and nothing to configure:
+
+- A `UserPromptSubmit` hook detects the `/discuss` marker and adds a read-only instruction for
+  that turn.
+- A `PreToolUse` hook denies the file-mutating tools (`Write`, `Edit`, `MultiEdit`,
+  `NotebookEdit`) while `/discuss` is in effect.
+
+The read-only state is tied to the current session turn and clears itself on your next normal
+prompt — nothing to toggle off.
 
 ## Install
 
-Add this marketplace:
-
 ```
 /plugin marketplace add 0sha-dow0/claude-code-discuss-only-mode
-```
-
-Install the plugin:
-
-```
 /plugin install discuss-mode@discuss-mode-marketplace
 /reload-plugins
 ```
 
-### Requirements
+## Use
 
-- Python 3.8+ available as either `python3` or `python` on your PATH (the hooks try
-  `python3` first, then fall back to `python`).
-- `sh` on your PATH. macOS and Linux always have it; on **Windows** install
-  [Git for Windows](https://git-scm.com/download/win) (which Claude Code already recommends).
+Add `/discuss` inline — after some text, not at the very start (a leading `/` is read as a
+slash command):
 
-## Usage
-
-Include `/discuss` as an inline marker in your prompt. Avoid placing it at the very start,
-because Claude Code reserves leading `/...` input for slash commands:
-
-```text
-Review this design /discuss before we implement it.
+```
+Walk me through the trade-offs of these two schemas /discuss
 ```
 
-The marker is case-sensitive and applies only to the current turn.
+Claude discusses; any attempt to edit a file is refused for that turn. Your next prompt
+without `/discuss` behaves normally.
 
-## Why this exists
+## What it guards — and what it doesn't
 
-Default mode is optimized for execution. Sometimes you want to brainstorm, clarify, or review
-a design without letting Claude immediately edit files. `/discuss` marks the current turn as
-read-only brainstorming and blocks Claude's edit path (`Write`/`Edit`/`NotebookEdit`) with
-feedback telling the model not to mutate and to continue the discussion instead.
+Blocked during a `/discuss` turn: `Write`, `Edit`, `MultiEdit`, `NotebookEdit`.
 
-## Scope and limitations (read before relying on it)
+Not blocked: read-only tools (`Read`, `Grep`, `Glob`), `Bash`, and MCP tools. This is an
+intent guardrail for Claude's normal edit path, not a sandbox — a shell command could still
+change files, which is deliberate so you keep read-only shell inspection.
 
-What is **hard-blocked** during a `/discuss` turn: `Write`, `Edit`, `MultiEdit`, `NotebookEdit`.
-Those calls are denied at the `PreToolUse` hook and cannot proceed.
+Also note: a prompt that *starts* with `/discuss` won't trigger it (Claude treats a leading
+`/` as a command), so place the marker after some text.
 
-What is **not** blocked (by design — this is an intent guardrail, not a sandbox):
+## Requirements
 
-- `Bash` — a shell command can still write files (`echo > f`, `sed -i`, `rm`, …). Not blocked,
-  because `/discuss` explicitly allows read-only shell inspection (`grep`, `cat`, `ls`).
-- MCP tools that write files or call external services. Only the built-in edit tools are matched.
-
-Also note: put `/discuss` **after** some leading text, not at the very start of the prompt.
-A message beginning with `/` is treated by Claude Code as a slash command, so a leading
-`/discuss` will not reach the hook. `Review this /discuss` works; `/discuss review this` may not.
+- Python 3.8+ available as `python3` or `python` on your PATH.
+- `sh` on your PATH — always present on macOS/Linux; on Windows install
+  [Git for Windows](https://git-scm.com/download/win).
 
 ## License
 
